@@ -2,6 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { readdirSync } = require("fs");
 
 // Use .env variable
 require("dotenv").config();
@@ -28,10 +29,12 @@ const path = process.env.PATH_STRING;
 const port = process.env.PORT || 8000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(morgan("dev"));
 app.use(cors());
 
-app.use(path, student);
+readdirSync("./routes").map((r) =>
+  app.use("/students", require("./routes/" + r))
+);
 
 app.listen(port, () => {
   console.log("Server is up and running on port numner " + port);
