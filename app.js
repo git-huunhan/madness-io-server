@@ -25,7 +25,7 @@ mongoose
 // Import routes for the students
 const student = require("./routes/student");
 const path = process.env.PATH_STRING;
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
