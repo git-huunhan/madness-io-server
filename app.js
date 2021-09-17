@@ -2,8 +2,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const morgan = require("morgan");
-const { readdirSync } = require("fs");
 
 // Use .env variable
 require("dotenv").config();
@@ -24,13 +22,16 @@ mongoose
     process.exit();
   });
 
+// Import routes for the students
+const student = require("./routes/student");
+const path = process.env.PATH_STRING;
+const port = process.env.PORT || 8000;
+
 app.use(express.json());
-app.use(morgan("dev"));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
-
-const port = process.env.PORT || 8000;
+app.use(path, student);
 
 app.listen(port, () => {
   console.log("Server is up and running on port numner " + port);
