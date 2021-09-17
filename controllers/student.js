@@ -1,52 +1,56 @@
-const Student = require("../models/student.model");
+const Student = require("../models/student");
 const slugify = require("slugify");
 
-exports.student_create = async (req, res) => {
+exports.createStudent = async (req, res) => {
   try {
     const {
-      studentcode,
-      firstname,
-      lastname,
+      studentCode,
+      firstName,
+      lastName,
       email,
       gender,
-      dateofbirth,
+      dateOfBirth,
       address,
       phone,
     } = req.body.student;
     res.json(
       await new Student({
-        studentcode,
-        firstname,
-        lastname,
+        studentCode,
+        firstName,
+        lastName,
         email,
         gender,
-        dateofbirth,
+        dateOfBirth,
         address,
         phone,
-        slug: slugify(studentcode + firstname),
+        slug: slugify(studentCode + firstName),
       }).save()
     );
   } catch (err) {
     console.log(err);
+
+    res.status(400).json({
+      err: err.message,
+    });
   }
 };
 
-exports.all_student_info = async (req, res) =>
+exports.queryAll = async (req, res) =>
   res.json(await Student.find({}).sort({ createdAt: -1 }).exec());
 
-exports.student_info = async (req, res) => {
+exports.queryStudentById = async (req, res) => {
   let student = await Student.findOne({ slug: req.params.slug }).exec();
   res.json({ student });
 };
 
-exports.student_update = async (req, res) => {
+exports.updateStudent = async (req, res) => {
   const {
-    studentcode,
-    firstname,
-    lastname,
+    studentCode,
+    firstName,
+    lastName,
     email,
     gender,
-    dateofbirth,
+    dateOfBirth,
     address,
     phone,
   } = req.body;
@@ -55,26 +59,28 @@ exports.student_update = async (req, res) => {
     const updated = await Student.findOneAndUpdate(
       { slug: req.params.slug },
       {
-        studentcode,
-        firstname,
-        lastname,
+        studentCode,
+        firstName,
+        lastName,
         email,
         gender,
-        dateofbirth,
+        dateOfBirth,
         address,
         phone,
-        slug: slugify(studentcode + firstname),
+        slug: slugify(studentCode + firstName),
       },
       { new: true }
     );
     res.json(updated);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Student update failed");
+    res.status(400).json({
+      err: err.message,
+    });
   }
 };
 
-exports.student_delete = async (req, res) => {
+exports.deleteStudent = async (req, res) => {
   try {
     res.json(await Student.findByIdAndDelete(req.params.id).exec());
   } catch (err) {

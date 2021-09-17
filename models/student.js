@@ -3,19 +3,19 @@ const Schema = mongoose.Schema;
 
 let studentSchema = new Schema(
   {
-    studentcode: {
+    studentCode: {
       type: String,
       required: true,
       unique: true,
       index: true,
       autoIndex: false,
     },
-    firstname: {
+    firstName: {
       type: String,
       required: true,
       max: 50,
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
       max: 50,
@@ -27,15 +27,19 @@ let studentSchema = new Schema(
     gender: {
       type: String,
       enum: ["Male", "Female"],
+      required: true,
     },
-    dateofbirth: {
+    dateOfBirth: {
       type: Date,
+      required: true,
     },
     address: {
       type: String,
+      required: true,
     },
     phone: {
       type: String,
+      required: true,
     },
     slug: {
       type: String,
@@ -48,4 +52,4 @@ let studentSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Student", studentSchema);
+module.exports = mongoose.model("student", studentSchema);

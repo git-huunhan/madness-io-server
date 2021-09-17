@@ -11,7 +11,7 @@ const app = express();
 
 // Connecting to the database
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(process.env.DATABASE_CONNECTION, {
     useNewUrlParser: true,
   })
   .then(() => {
@@ -23,15 +23,15 @@ mongoose
   });
 
 // Import routes for the students
-const student = require("./routes/student.route");
+const student = require("./routes/student");
+const path = process.env.PATH_STRING;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use("/students", student);
-
-const port = 8000;
+app.use(path, student);
 
 app.listen(port, () => {
   console.log("Server is up and running on port numner " + port);
