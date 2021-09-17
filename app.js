@@ -17,13 +17,8 @@ mongoose
     useFindAndModify: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
-    console.log("Successfully connected to the database");
-  })
-  .catch((err) => {
-    console.log("Could not connect to the database. Exiting now...");
-    process.exit();
-  });
+  .then(() => console.log("DB CONNECTED"))
+  .catch((err) => console.log("DB CONNECTION ERR", err));
 
 // Import routes for the students
 const student = require("./routes/student");
