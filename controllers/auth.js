@@ -1,7 +1,7 @@
 const Auth = require("../models/auth");
 const jwt = require("jsonwebtoken");
 
-exports.getAdminLogin = async (req, res) => {
+exports.getUserLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -35,7 +35,7 @@ exports.getAdminLogin = async (req, res) => {
   }
 };
 
-exports.getAdminData = async (req, res) => {
+exports.getUserData = async (req, res) => {
   try {
     const user = await Auth.find({}).sort({ createdAt: -1 }).exec();
 
@@ -43,6 +43,24 @@ exports.getAdminData = async (req, res) => {
   } catch (err) {
     console.log(err);
 
+    res.status(400).json({
+      err: err.message,
+    });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { _id, displayName, address } = req.body.data;
+
+  try {
+    const updated = await Auth.findByIdAndUpdate(_id, {
+      displayName: displayName,
+      address: address,
+    });
+
+    res.json(updated);
+  } catch (err) {
+    console.log(err);
     res.status(400).json({
       err: err.message,
     });
