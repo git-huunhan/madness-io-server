@@ -58,7 +58,24 @@ exports.updateUser = async (req, res) => {
       address: address,
     });
 
-    res.json(updated);
+    const token = jwt.sign(
+      { _id: _id, displayName: displayName, address: address },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "24h",
+      }
+    );
+
+    // save user token
+    updated.token = token;
+
+    let parseItems = [];
+    parseItems.push({
+      user: updated,
+      accessToken: token,
+    });
+
+    res.json(parseItems);
   } catch (err) {
     console.log(err);
     res.status(400).json({
